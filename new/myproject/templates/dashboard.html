@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background-color: #f9fafb;
+    color: #111827;
+    line-height: 1.5;
+}
+.logout-btn {
+    color: white;
+    background-color: #e74c3c;
+    padding: 6px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #c0392b;
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+}
+
+/* Button Styles */
+.btn-primary {
+    background-color: #a0b1c6;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #7E69AB;
+}
+
+.btn-secondary {
+    background-color: #fff;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+}
+
+.plus-icon {
+    font-size: 1.25rem;
+}
+
+/* Card Styles */
+.card {
+    background: white;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.all{
+    background: white;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.all:hover {
+    transform: scale(0.98);
+  }
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.card.purple { background-color: #f3f0ff; }
+.card.blue { background-color: #e0f2fe; }
+.card.rose { background-color: #ffe4e6; }
+.card.green { background-color: #dcfce7; }
+
+.label {
+    font-size: 0.875rem;
+    color: #4b5563;
+    margin-bottom: 0.5rem;
+}
+
+.value {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.card.purple .value { color: #7c3aed; }
+.card.blue .value { color: #0284c7; }
+.card.rose .value { color: #e11d48; }
+.card.green .value { color: #16a34a; }
+
+/* Main Content Layout */
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Transactions List */
+.transactions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.transaction-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.transaction-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.transaction-title {
+    font-weight: 500;
+}
+
+.transaction-date {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.transaction-amount {
+    font-weight: 500;
+}
+
+.amount-income { color: #16a34a; }
+.amount-expense { color: #dc2626; }
+
+/* Progress Bars */
+.progress-container {
+    margin-bottom: 1rem;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 0.5rem;
+    background-color: #e5e7eb;
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #9b87f5;
+    transition: width 0.3s ease;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    width: 100%;
+    max-width: 500px;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+}
+.navbar {
+    background-color: #748CAB;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    margin-bottom: 2rem;
+}
+
+.nav-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s;
+}
+
+.nav-links a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-links a.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.date-display {
+    font-size: 0.875rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+}
+
+
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem 2rem;
+}
+</style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-logo">Budget Buddy</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('analytics') }}">Analytics</a>
+            <a href="{{ url_for('shared') }}">Shared space</a>
+            <a href="{{ url_for('logout') }}" class="date-display">Logout</a>
+        </div>
+        <div class="date-display" id="currentDate"></div>
+    </nav>
+    
+
+   
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Financial Dashboard</h1>
+            <button id="addTransactionBtn" class="btn-primary">
+                <span class="plus-icon">+</span> Add Transaction
+            </button>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="card purple">
+                <p class="label">Net Balance</p>
+                <p class="value" id="netBalance">$0</p>
+            </div>
+            <div class="card blue">
+                <p class="label">Monthly Expense</p>
+                <p class="value" id="monthlyExpense">$0</p>
+            </div>
+            <div class="card rose">
+                <p class="label">Monthly Income</p>
+                <p class="value" id="monthlyIncome">$0</p>
+            </div>
+            <div class="card green">
+                <p class="label">Total Savings</p>
+                <p class="value" id="totalSavings">$0</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Transactions List -->
+            <div class="card">
+                <h2>Transactions</h2>
+                <div id="transactionsList" class="transactions-list"></div>
+            </div>
+
+            <!-- Overview and Goals -->
+            <div class="right-panel">
+                <div class="card">
+                    <h2>Overview</h2>
+                    <div id="overviewChart" class="overview-chart"></div>
+                </div>
+                <br>
+                
+                <div class="card">
+                    <h2>Goals</h2>
+                    <div id="goalsList" class="goals-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction Modal -->
+    <div id="transactionModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Add Transaction</h2>
+            <form id="transactionForm">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="amount">Amount</label>
+                    <input type="number" id="amount" required>
+                </div>
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="type">Type</label>
+                    <select id="type" required>
+                        <option value="expense">Expense</option>
+                        <option value="income">Income</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" required>
+                        <option value="Food & Drinks">Food & Drinks</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Health">Health</option>
+                        <option value="Entertainment">Entertainment</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+<script>
+    // Data structure for storing transactions
+let transactions = [];
+
+// DOM Elements
+const addTransactionBtn = document.getElementById('addTransactionBtn');
+const transactionModal = document.getElementById('transactionModal');
+const transactionForm = document.getElementById('transactionForm');
+const cancelBtn = document.getElementById('cancelBtn');
+const transactionsList = document.getElementById('transactionsList');
+
+// Initialize the app
+function init() {
+    loadTransactions();
+    updateUI();
+    setupEventListeners();
+}
+
+// Event Listeners
+function setupEventListeners() {
+    addTransactionBtn.addEventListener('click', () => {
+        transactionModal.classList.add('active');
+    });
+
+    cancelBtn.addEventListener('click', () => {
+        transactionModal.classList.remove('active');
+        transactionForm.reset();
+    });
+
+    transactionForm.addEventListener('submit', handleTransactionSubmit);
+}
+
+// Handle form submission
+function handleTransactionSubmit(e) {
+    e.preventDefault();
+
+    const transaction = {
+        id: Math.random().toString(36).substr(2, 9),
+        title: document.getElementById('title').value,
+        amount: Number(document.getElementById('amount').value),
+        date: document.getElementById('date').value,
+        type: document.getElementById('type').value,
+        category: document.getElementById('category').value
+    };
+
+    transactions.push(transaction);
+    saveTransactions();
+    updateUI();
+    
+    transactionModal.classList.remove('active');
+    transactionForm.reset();
+}
+
+// Update UI elements
+function updateUI() {
+    updateSummaryCards();
+    updateTransactionsList();
+    updateOverviewChart();
+    updateGoalsList();
+}
+
+// Update summary cards
+function updateSummaryCards() {
+    const { monthlyExpense, monthlyIncome, netBalance, totalSavings } = calculateTotals();
+    
+    document.getElementById('netBalance').textContent = `$${netBalance}`;
+    document.getElementById('monthlyExpense').textContent = `$${monthlyExpense}`;
+    document.getElementById('monthlyIncome').textContent = `$${monthlyIncome}`;
+    document.getElementById('totalSavings').textContent = `$${totalSavings}`;
+}
+
+// Calculate totals
+function calculateTotals() {
+    const monthlyExpense = transactions
+        .filter(t => t.type === 'expense')
+        .reduce((acc, curr) => acc + curr.amount, 0);
+    
+    const monthlyIncome = transactions
+        .filter(t => t.type === 'income')
+        .reduce((acc, curr) => acc + curr.amount, 0);
+    
+    const netBalance = monthlyIncome - monthlyExpense;
+    const totalSavings = netBalance;
+
+    return { monthlyExpense, monthlyIncome, netBalance, totalSavings };
+}
+
+// Update transactions list
+function updateTransactionsList() {
+    transactionsList.innerHTML = transactions.map(transaction => `
+        <div class="transaction-item animate-fadeIn">
+            <div class="transaction-info">
+                <span class="transaction-title">${transaction.title}</span>
+                <span class="transaction-date">${transaction.date}</span>
+            </div>
+            <div class="transaction-actions">
+                <span class="transaction-amount ${transaction.type === 'income' ? 'amount-income' : 'amount-expense'}">
+                    ${transaction.type === 'income' ? '+' : '-'}$${Math.abs(transaction.amount)}
+                </span>
+                <button onclick="deleteTransaction('${transaction.id}')" class="btn-secondary">Delete</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Update overview chart
+function updateOverviewChart() {
+    const expensesOnly = transactions.filter(t => t.type === 'expense');
+    const totalExpenses = expensesOnly.reduce((acc, curr) => acc + curr.amount, 0);
+    
+    const categories = ['Food & Drinks', 'Travel', 'Health', 'Entertainment'];
+    const overviewChart = document.getElementById('overviewChart');
+    
+    overviewChart.innerHTML = categories.map(category => {
+        const categoryTotal = expensesOnly
+            .filter(t => t.category === category)
+            .reduce((acc, curr) => acc + curr.amount, 0);
+        
+        const percentage = totalExpenses === 0 ? 0 : Math.round((categoryTotal / totalExpenses) * 100);
+        
+        return `
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span>${category}</span>
+                    <span>${percentage}%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${percentage}%"></div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Update goals list
+function updateGoalsList() {
+    const today = new Date().toISOString().split('T')[0];
+    const todayTransactions = transactions.filter(t => t.date === today);
+    
+    const todayIncome = todayTransactions
+        .filter(t => t.type === 'income')
+        .reduce((acc, curr) => acc + curr.amount, 0);
+    
+    const todayExpenses = todayTransactions
+        .filter(t => t.type === 'expense')
+        .reduce((acc, curr) => acc + curr.amount, 0);
+    
+    const todaySavings = todayIncome - todayExpenses;
+    
+    const todayEntertainment = todayTransactions
+        .filter(t => t.category === 'Entertainment' && t.type === 'expense')
+        .reduce((acc, curr) => acc + curr.amount, 0);
+    
+    const todayHealthyFood = todayTransactions
+        .filter(t => t.category === 'Food & Drinks' && t.type === 'expense')
+        .reduce((acc, curr) => acc + curr.amount, 0);
+
+    const goals = [
+        { 
+            title: 'Save $20 Daily', 
+            current: Math.max(0, todaySavings), 
+            total: 20 
+        },
+        { 
+            title: 'Spend Only $30 On Entertainment', 
+            current: Math.min(todayEntertainment, 30), 
+            total: 30 
+        },
+        { 
+            title: 'Spend On Healthy Foods', 
+            current: Math.min(todayHealthyFood, 30), 
+            total: 30 
+        }
+    ];
+
+    const goalsList = document.getElementById('goalsList');
+    goalsList.innerHTML = goals.map(goal => `
+        <div class="progress-container">
+            <div class="progress-header">
+                <span class="font-medium">${goal.title}</span>
+                <span class="text-gray-500">$${goal.current}/$${goal.total}</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: ${(goal.current / goal.total) * 100}%"></div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Delete transaction
+function deleteTransaction(id) {
+    transactions = transactions.filter(t => t.id !== id);
+    saveTransactions();
+    updateUI();
+}
+
+// Local Storage functions
+function saveTransactions() {
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+}
+
+function loadTransactions() {
+    const saved = localStorage.getItem('transactions');
+    transactions = saved ? JSON.parse(saved) : [];
+}
+
+// Initialize the app when the page loads
+document.addEventListener('DOMContentLoaded', init);
+function updateDateDisplay() {
+    const dateDisplay = document.getElementById('currentDate');
+    const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    };
+    const today = new Date();
+    dateDisplay.textContent = today.toLocaleDateString('en-US', options);
+}
+
+// Initialize the app
+function init() {
+    loadTransactions();
+    updateUI();
+    setupEventListeners();
+    updateDateDisplay(); // Add date display update
+}
+
+// ... keep existing code
+
+// Initialize the app when the page loads
+document.addEventListener('DOMContentLoaded', init);
+
+</script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</html>

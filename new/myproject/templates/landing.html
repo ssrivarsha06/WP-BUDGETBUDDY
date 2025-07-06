@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing page</title>
+    <link rel="stylesheet" href="landingstyles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <style>
+        body {
+    margin: 0;
+    font-family: "Poppins", serif;}
+
+/* Navbar */
+.navbar {
+    position: sticky;
+    z-index: 1000; /* Higher than other elements */
+    top: 0;
+    overflow: hidden;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo Placeholder */
+.logo-placeholder {
+    width: 120px;
+    height: 40px;
+    align-content: center;
+    text-align: center;
+    
+}
+
+/* Navigation Links */
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-links li {
+    display: inline;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+}
+
+/* Authentication Buttons */
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.login, .signup {
+    border: 1px solid black;
+    padding: 10px 40px;
+    font-size: 14px;
+    font-family: "Poppins", serif;
+    border-radius: 20px;
+    cursor: pointer;
+    background: transparent;
+}
+
+.signup {
+    background-color: black;
+    color: white;
+    border: none;
+}
+
+.login:hover {
+    background-color: black;
+    color: white;
+}
+
+.signup:hover {
+    opacity: 0.7;
+}
+
+
+/* Hero Section */
+.hero {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 50px !important;
+}
+
+/* Left Side Content */
+.herocontent {
+    max-width: 50% !important;
+}
+
+.herocontent h1 {
+    font-size: 62px !important;
+    font-family: "Poppins", serif !important;
+    font-weight: 600 !important;
+    color: #222 !important;
+    margin: 0 !important;
+}
+
+h1 {
+    font-size: 62px;
+    font-family: "Poppins", serif;
+    font-weight: 600 ;
+    color: #222;
+    margin: 0;
+}
+
+.highlight {
+    color: #D8FD49 !important;
+}
+
+p {
+    font-size: 16px;
+    margin: 0;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Buttons */
+.buttons {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.get-started {
+    background-color: #D8FD49;
+    color: black;
+    font-size: 14px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.get-started:hover {
+    opacity: 0.8;
+}
+
+.login {
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    border: none;
+}
+
+/* Right Side Image */
+.hero-image img {
+    width: 460px;
+    height: auto;
+    padding-right: 50px;
+    padding-top: 30px;
+}
+
+
+/* Budget Section */
+.budget-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #748CAB;
+    padding: 50px;
+    border-radius: 32px;
+    margin: 40px;
+}
+
+/* Left Side Content */
+.budget-content {
+    max-width: 50%;
+    color: white;
+}
+
+.budget-content h1 {
+    font-weight: 400;
+    font-style: normal;
+    font-size: 36px;
+    color: white;
+    line-height: 1.2;
+    margin-bottom: 10px;
+}
+
+.budget-content .highlight {
+    color: #D8FD49;
+}
+
+.budget-content p {
+    font-size: 15px;
+    font-style: italic;
+    color: white;
+    opacity: 0.8;
+    line-height: 1.6;
+}
+
+/* Button */
+.budget-btn {
+    background-color: #D8FD49;
+    color: black;
+    font-family: "Poppins", serif;
+    font-size: 14px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 64px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.budget-btn:hover {
+    opacity: 0.8;
+}
+
+/* Right Side Image */
+.budget-image img {
+    margin-right: 80px;
+    width: 301px;
+    height: auto;
+}
+/* Main Scrolling Section */
+.scrolling-section {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    background-color: white;
+    padding: 8px 0;
+}
+
+/* Scrolling Container */
+.scroll-container {
+    display: flex;
+    gap: 50px;
+    min-width: 200%; /* Ensures seamless looping */
+    animation: scroll-left 25s linear infinite;
+}
+
+.scroll-container.reverse {
+    animation: scroll-right 25s linear infinite;
+}
+
+/* Text Styling */
+.scroll-container span {
+    font-size: 18px;
+    font-weight: 500;
+    color: #4a4a4a;
+    padding: 0 20px;
+}
+
+/* Keyframe Animations */
+@keyframes scroll-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); } /* Moves only half to avoid flickering */
+}
+
+@keyframes scroll-right {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+}
+
+ /* Cards Container */
+ .cards-container {
+    margin-top: 70px;
+    margin-bottom: 70px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Individual Card */
+.card {
+    width: 360px;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: left;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding-bottom: 80px;
+}
+
+/* Colors for Each Card */
+.card:nth-child(1) { background-color: #DDE0FD; }  /* Light Blue */
+.card:nth-child(2) { background-color: #E6D4F4; }  /* Light Purple */
+.card:nth-child(3) { background-color: #DFFBC7; }  /* Light Green */
+
+/* Headings */
+.card h2 {
+    font-size: 30px;
+    font-family: "Lato", serif;
+    font-weight: 900;
+    font-style: normal;
+    margin-bottom: 15px;
+}
+
+.card:nth-child(1) h2 { color: #343CED; }  /* Blue */
+.card:nth-child(2) h2 { color: #9300B8; }  /* Purple */
+.card:nth-child(3) h2 { color: #00B207; }  /* Green */
+
+/* Feature Titles */
+.card h3 {
+    font-size: 16px;
+    font-family: "Lato", serif;
+    font-weight: normal;
+    font-style: normal;
+    margin: 10px 0 5px;
+}
+
+/* Feature Description */
+.card p {
+    font-size: 14px;
+    font-family: "Lato", serif;
+    color: #555;
+    margin: 0;
+}
+
+/* Feature Section Styling */
+.feature-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 80px 10%;
+    background-color: #748CAB; /* Matching the theme */
+    color: #E6E6E6;
+}
+
+/* Navigation Bar */
+.nav2 {
+    display: flex;
+    gap: 10px;
+}
+
+.nav2 button {
+    background: #ffffff;
+    border: none;
+    width: 215px;
+    padding: 12px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #343CED;
+    transition: 0.3s;
+}
+
+.nav2 button.active {
+    background: #E2E3FB;
+    color: #343CED;
+    border: 1px solid  #343CED;
+}
+
+.nav2 button:hover {
+    background: #D0D0FF;
+}
+
+/* Content Container */
+.feature-content-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 1000px;
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+    -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
+}
+
+.feature-content-container::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome/Safari */
+}
+
+/* Feature Content Layout */
+.feature-content {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 80px;
+    padding: 20px 0;
+    min-height: 400px;
+    box-sizing: border-box;
+}
+
+/* Text Content */
+.text-content {
+    flex: 2;
+    max-width: 600px;
+}
+
+.text-content h1 {
+    font-weight: 400;
+    font-size: 48px;
+    color: white;
+}
+
+.text-content p {
+    font-size: 16px;
+    color: #CFCFCF;
+    margin: 10px 0;
+    margin-bottom: 20px;
+}
+
+/* CTA Button */
+.cta-button {
+    background: #D8FD49;
+    width: 270px;
+    color: black;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.cta-button:hover {
+    background: #DFFF30;
+}
+
+/* Image Placeholder */
+.image-placeholder {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.image-placeholder img {
+    margin: 20px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Audience Section */
+.audience-section {
+    padding: 80px 10%;
+    text-align: center;
+}
+
+.audience-section h1 {
+    font-size: 42px;
+    margin-bottom: 50px;
+    font-weight: 400;
+}
+
+.audience-section h1 span {
+    color: #c3ff00;
+    font-weight: 500;
+}
+
+.audience-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.audience-card {
+    border-radius: 16px;
+    padding: 30px;
+    text-align: left;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    height: 180px;
+    display: flex;
+    align-items: center;
+}
+
+.audience-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.card-content {
+    position: relative;
+    width: 100%;
+}
+
+.card-content h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.card-content p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.arrow-icon {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-size: 20px;
+    color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .feature-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .image-placeholder {
+        order: -1; /* Moves image above text */
+    }
+
+    .audience-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 1s ease-out forwards;
+    opacity: 0;
+}
+
+.budget-footer {
+    background-color: #1A2538;
+    color: white;
+    text-align: left;
+    padding: 30px;
+    font-family: 'Arial', sans-serif;
+}
+
+.footer-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.footer-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.footer-made-by {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.footer-authors {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px;
+}
+
+.footer-authors li {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.footer-divider {
+    border: none;
+    border-top: 1px solid #3A4A63;
+    margin: 15px 0;
+}
+
+.footer-copyright {
+    font-size: 14px;
+    opacity: 0.7;
+}
+html {
+  scroll-behavior: smooth;
+}
+
+
+
+    </style>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo-placeholder">Budget Buddy</div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#features-section">Features</a></li>
+            <li><a href="#footer-section">About Us</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <a href="{{ url_for('login') }}"><button class="login">Login</button></a>
+            <a href="{{ url_for('signup') }}"><button class="signup">Sign up</button></a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="herocontent">
+            <h1>Take Control of Your <span class="highlight">Finances</span> <em>Effortlessly!</em></h1>
+            <p>Track your expenses, set budgets, and plan your savings—<br> All in one beautifully designed platform.</p>
+            <div class="buttons">
+                <a href="{{ url_for('signup') }}"><button class="get-started">Get Started</button></a>
+                <a href="{{ url_for('login') }}"><button class="login">Login →</button></a>
+
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="{{ url_for('static', filename='graph.png') }}" alt="graph">
+        </div>
+    </section>
+
+    <section class="budget-section">
+        <div class="budget-content">
+            <h1>Take Control of <span class="highlight">Your Money</span><br> <em>with Ease!</em></h1>
+            <p>Track your expenses, plan your budget, and stay ahead of your finances—all in one place. Whether it's personal savings or shared budgets, we've got you covered.</p>
+            <button class="budget-btn">Start Budgeting</button>
+        </div>
+        <div class="budget-image">
+            <img src="{{ url_for('static', filename='stack.svg') }}" alt="stack ">
+        </div>
+    </section>
+
+    <h1 style="font-size: 50px; font-weight: 400; text-align: center;">
+        Smart <span style="color: #c3ff00; font-weight: 500;">Finance</span>, <em>Simple Living</em>
+    </h1>
+
+    <!-- Scrolling Text Rows -->
+    <div class="scrolling-section">
+        <div class="scroll-container">
+            <span>Budgeting</span>
+            <span>Smart Savings</span>
+            <span>Expense Tracking</span>
+            <span>Goal Setting</span>
+            <span>Financial Freedom</span>
+            <span>Shared Budgets</span>
+            <span>Smart Reminders</span>
+            <span>Subscription Tracker</span>
+        </div>
+    </div>
+
+    <div class="scrolling-section">
+        <div class="scroll-container reverse">
+            <span>Subscription Tracker</span>
+            <span>Bill Alerts</span>
+            <span>Spending Insights</span>
+            <span>Money Management</span>
+            <span>Stay on Track</span>
+            <span>Real-Time Updates</span>
+            <span>Expense Trends</span>
+            <span>Simple & Secure</span>
+        </div>
+    </div>
+
+    <script>
+        // Duplicate text elements for seamless scrolling
+        document.querySelectorAll(".scroll-container").forEach(container => {
+            let clone = container.innerHTML;
+            container.innerHTML += clone; // Duplicate content to ensure continuous loop
+        });
+    </script>
+
+<div class="cards-container" id="features-section">
+    <!-- Smart Budgeting -->
+    <div class="card">
+        <h2>Smart Budgeting</h2>
+        <h3>Custom budget</h3>
+        <p>Create personalized budget plan</p>
+
+        <h3>Set spending limits</h3>
+        <p>Get alerts when exceeding limits</p>
+
+        <h3>Set Goals</h3>
+        <p>Plan for savings weekly or monthly</p>
+    </div>
+
+    <!-- Visual Reports -->
+    <div class="card">
+        <h2>Visual Reports</h2>
+        <h3>Categorization</h3>
+        <p>Track expenses by category</p>
+
+        <h3>Recurring tracking</h3>
+        <p>Auto-track subscription bills</p>
+
+        <h3>Custom reports</h3>
+        <p>Analyze spending habits</p>
+    </div>
+
+    <!-- Secure & Accessible -->
+    <div class="card">
+        <h2>Secure & Accessible</h2>
+        <h3>Sync bills</h3>
+        <p>Share expenses with others</p>
+
+        <h3>Automate</h3>
+        <p>Easy access via automation</p>
+
+        <h3>Privacy</h3>
+        <p>Data protection and security</p>
+    </div>
+</div>
+<section class="feature-section">
+    <!-- Navigation -->
+    <div class="nav2">
+        <button class="active" data-content="shared">SHARED BUDGET</button>
+        <button data-content="analytics">ANALYTICS</button>
+        <button data-content="goals">SET GOALS</button>
+        <button data-content="tracker">TRACKER</button>
+    </div>
+
+    <!-- Content Container -->
+    <div class="feature-content-container">
+        <!-- Content Sections -->
+        <div class="feature-content active" id="shared-content">
+            <div class="text-content">
+                <h1>Share your expenses with friends & family</h1>
+                <p>Invite others via email or a unique budget link and create shared budgets for households, trips, or group expenses.</p>
+                <button class="cta-button">Start budgeting</button>
+            </div>
+            <div class="image-placeholder">
+                <img src="{{ url_for('static', filename='Frame.svg') }}" alt="frame ">
+            </div>
+        </div>
+
+        <div class="feature-content" id="analytics-content">
+            <div class="text-content">
+                <h1>View your analytics & track your trends</h1>
+                <p>View pie charts to see exactly where your money goes and analyze spending habits over time with detailed line graphs.</p>
+                <button class="cta-button">View analytics</button>
+            </div>
+            <div class="image-placeholder">
+                <img src="{{ url_for('static', filename='2.svg') }}" alt="Analytics Illustration ">
+            </div>
+        </div>
+
+        <div class="feature-content" id="goals-content">
+            <div class="text-content">
+                <h1>Set your goals & work on it</h1>
+                <p>Plan accordingly for your goals and get real-time notifications when exceeding your limits.</p>
+                <button class="cta-button">Set goals</button>
+            </div>
+            <div class="image-placeholder">
+                <img src="{{ url_for('static', filename='2.svg') }}" alt="Goals Illustration ">
+            </div>
+        </div>
+
+        <div class="feature-content" id="tracker-content">
+            <div class="text-content">
+                <h1>Get hands on with budget tracking</h1>
+                <p>Track expenses by category: Food, Rent, Travel, and more. Automatically log subscriptions or recurring bills.</p>
+                <button class="cta-button">Start tracking</button>
+            </div>
+            <div class="image-placeholder">
+                <img src="{{ url_for('static', filename='2.svg') }}" alt="Tracker Illustration ">
+            </div>
+        </div>
+    </div>
+</section>
+<section class="bg-[#F8F5F0] p-10 w-full min-h-screen flex justify-center items-center">
+    <div class="max-w-6xl flex flex-wrap md:flex-nowrap gap-20 items-center">
+        <div class="flex-1 mt-4 animate-fadeInUp">
+            <h1 class="text-4xl font-semibold text-black fade-in-up">
+                <span class="text-blue-600">Budget Tracker</span> makes work better for everyone
+            </h1>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1 w-full">
+            <div class="bg-[#DDFEC9] p-6 rounded-xl flex flex-col items-center text-center shadow-lg transform transition-transform duration-300 hover:scale-110 fade-in-up">
+                <img src="{{ url_for('static', filename='s1.svg') }}" alt="Individuals" class="w-32 h-32 mb-4" >
+                <h3 class="text-green-600 text-lg font-medium">Individuals</h3>
+            </div>
+            <div class="bg-[#EADCF6] p-6 rounded-xl flex flex-col items-center text-center shadow-lg transform transition-transform duration-300 hover:scale-110 fade-in-up">
+                <img src="{{ url_for('static', filename='s2.svg') }}" alt="Families" class="w-32 h-32 mb-4" >
+                <h3 class="text-purple-600 text-lg font-medium">Families</h3>
+            </div>
+            <div class="bg-[#D6D8F9] p-6 rounded-xl flex flex-col items-center text-center shadow-lg transform transition-transform duration-300 hover:scale-110 fade-in-up">
+                <img src="{{ url_for('static', filename='s3.svg') }}"  alt="Small Businesses" class="w-32 h-32 mb-4" >
+
+                <h3 class="text-blue-600 text-lg font-medium">Small Businesses</h3>
+            </div>
+            <div class="bg-[#E9DED5] p-6 rounded-xl flex flex-col items-center text-center shadow-lg transform transition-transform duration-300 hover:scale-110 fade-in-up">
+                <img src="{{ url_for('static', filename='s4.svg') }}"  alt="Teams & Departments" class="w-32 h-32 mb-4">
+
+                <h3 class="text-brown-600 text-lg font-medium">Teams & Departments</h3>
+            </div>
+        </div>
+    </div>
+</section>
+<footer class="budget-footer" id="footer-section">
+    <div class="footer-content">
+        <h2 class="footer-title">Budget Buddy</h2>
+        <p class="footer-made-by">Made by</p>
+        <ul class="footer-authors">
+            <li>Shruti S - 23BCE1383</li>
+            <li>Ramya Nakshathra R - 23BCE1611</li>
+            <li>Sri Varsha S - 23BCE1978</li>
+        </ul>
+        <hr class="footer-divider">
+        <p class="footer-copyright">© 2025, Web Programming, BCSE203E</p>
+    </div>
+</footer>
+
+
+
+<script>
+    document.querySelectorAll('.nav2 button').forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons
+            document.querySelectorAll('.nav2 button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked button
+            button.classList.add('active');
+            
+            // Get the content container and all content sections
+            const container = document.querySelector('.feature-content-container');
+            const contents = document.querySelectorAll('.feature-content');
+            const targetContent = document.getElementById(button.dataset.content + '-content');
+            
+            // Calculate scroll position
+            const scrollPosition = Array.from(contents).indexOf(targetContent) * container.offsetWidth;
+            
+            // Smooth scroll to the target content
+            container.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    function expandCard(card) {
+        card.style.transform = "scaleX(1.1)";
+        setTimeout(() => {
+            card.style.transform = "scaleX(1)";
+        }, 300);
+    }
+</script>
+
+
+</body>
+</html>
+

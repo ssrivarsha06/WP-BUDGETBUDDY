@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Dashboard</title>
+    <link rel="stylesheet" href="analyticsstyles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+<style>
+    :root {
+    --primary-color: #6B7280;
+    --background-color: #F3F4F6;
+    --card-background: rgba(255, 255, 255, 0.8);
+    --text-color: #1F2937;
+    --border-color: #E5E7EB;
+    --positive-color: #10B981;
+    --negative-color: #EF4444;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+body {
+    background: linear-gradient(to bottom, #F9FAFB, #F3F4F6);
+    min-height: 100vh;
+}
+/*
+.navbar {
+    background: #748CAB;
+    color: #E5E7EB;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.nav-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    width: 15rem;
+    height: 2rem;
+    border-radius: 0.375rem;
+}
+.logo h3 {
+    font-size:x-large;
+}
+
+.nav-links {
+    color: #ffffff;
+}
+
+.profile-pic {
+    width: 3rem;
+    height: 3rem;
+    background: var(--border-color);
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.profile-pic:hover {
+    transform: scale(1.05);
+}
+
+.profile {
+    align-items: center;
+}
+*/
+.navbar {
+    background-color: #748CAB;
+    padding: 1rem 2rem;
+    position: relative; /* This allows centering nav links */
+    display: flex;
+    align-items: center;
+    height: 60px;
+    margin-bottom: 2rem;
+}
+
+.nav-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    z-index: 2;
+}
+
+.nav-links {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s;
+}
+
+.nav-links a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-links a.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+.main-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.glass-card {
+    background: var(--card-background);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    position: relative;
+}
+
+.stat-card-savings {
+    position: relative;
+    background-color: #E6D4F4; 
+}
+
+.stat-card-savings .stat-value {
+    color: #9300B8; 
+}
+
+.stat-card-balance {
+    position: relative;
+    background-color: #DDE0FD; 
+}
+
+.stat-card-balance .stat-value {
+    color: #343CED; 
+}
+
+.stat-card-expense {
+    position: relative;
+    background-color: #E4D4D1; 
+}
+
+.stat-card-expense .stat-value {
+    color: #582929; 
+}
+
+.stat-card-income {
+    position: relative;
+    background-color: #DFFBC7; 
+}
+
+.stat-card-income .stat-value {
+    color: #00B207; 
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0.5rem 0;
+}
+
+.stat-change {
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.positive {
+    color: var(--positive-color);
+}
+
+.negative {
+    color: var(--negative-color);
+}
+
+.add-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: none;
+    background: #F3F4F6;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.time-range {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.time-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.time-btn.active {
+    background: #E5E7EB;
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.chart-card {
+    height: 400px;
+}
+
+.transactions {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.date-input {
+    font-size: 1.5rem;
+    font-weight: 600;
+    padding: 0.5rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    background: var(--card-background);
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 1rem;
+    width: 80%;
+    max-width: 500px;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+form input,
+form select {
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+
+form button {
+    padding: 0.5rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.transactions {
+    display: flex;
+    justify-content: space-between; /* Pushes button to the right */
+    align-items: center; /* Aligns elements vertically */
+    flex-wrap: wrap; /* Ensures responsiveness */
+    gap: 1rem; /* Adds spacing between elements */
+}
+
+.add-transaction-btn {
+    margin-left: auto; /* Pushes button to the right */
+    padding: 0.5rem 1rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.delete-btn {
+    background-color: var(--negative-color);
+    color: white;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 0.875rem;
+}
+
+.delete-btn:hover {
+    background-color: #DC2626;
+}
+
+@media (min-width: 768px) {
+    .nav-links {
+        display: flex;
+        gap: 2rem;
+    }
+
+    .nav-link {
+        color: #ffffff;
+        text-decoration: none;
+        padding-bottom: 0.25rem;
+    }
+
+    .nav-link.active {
+        border-bottom: 2px solid #ffffff;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .date-card {
+        grid-column: span 2;
+    }
+
+    .stat-card {
+        grid-column: span 1;
+    }
+
+    .charts-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+}
+.date-display {
+    font-size: 0.875rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+}
+</style>
+</head>
+<body>
+   <!--<nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h3>Budget Buddy</h3>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="nav-link">Dashboard</a>
+                <a href="#" class="nav-link active">Analytics</a>
+                <a href="#" class="nav-link">Shared space</a>
+            </div>
+            <div class="profile-pic">
+                
+            </div>
+        </div>
+    </nav>-->
+    <header class="navbar">
+        <div class="nav-logo">BudgetBuddy</div>
+        <nav class="nav-links">
+          
+            <a href="{{ url_for('dashboard') }}" >Dashboard</a>
+            <a href="{{ url_for('analytics') }}" >Analytics</a>
+            <a href="{{ url_for('shared') }}">Shared space</a>
+            <a href="{{ url_for('logout') }}" class="date-display">Logout</a>
+
+        </nav>
+        
+      </header>
+
+    <main class="main-content">
+        <div class="stats-grid">
+            <div class="date-card glass-card">
+                <h3>Date</h3>
+                <div class="date-selector">
+                    <input type="date" id="dateInput" class="date-input">
+                    <input type="month" id="monthInput" class="date-input hidden">
+                    <input type="number" id="yearInput" class="date-input hidden" min="2000" max="2100">
+                </div>
+            </div>
+            <div class="stat-card-savings stat-card glass-card">
+                <h3>Total Savings</h3>
+                <p class="stat-value" id="savingsValue">$600</p>
+                <p class="stat-change positive">+15%</p>
+            </div>
+            <div class="stat-card-balance stat-card glass-card">
+                <h3>Net Balance</h3>
+                <p class="stat-value" id="balanceValue">$200</p>
+                <p class="stat-change negative">-5%</p>
+            </div>
+            <div class="stat-card-expense stat-card glass-card">
+                <h3>Expenses</h3>
+                <p class="stat-value" id="expensesValue">$200</p>
+                <button class="add-button" onclick="openModal('expenseModal')">+</button>
+            </div>
+            <div class="stat-card-income stat-card glass-card">
+                <h3>Income</h3>
+                <p class="stat-value" id="incomeValue">$400</p>
+                <button class="add-button" onclick="openModal('incomeModal')">+</button>
+            </div>
+        </div>
+
+        <div class="time-range">
+            <button class="time-btn active" data-range="daily">Daily</button>
+            <button class="time-btn" data-range="monthly">Monthly</button>
+            <button class="time-btn" data-range="yearly">Yearly</button>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card glass-card">
+                <h3>Expense Breakdown</h3>
+                <canvas id="expenseChart"></canvas>
+            </div>
+            <div class="chart-card glass-card">
+                <h3>Income vs Expenses Trend</h3>
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+
+        <div class="transactions glass-card">
+            <h3>Transactions</h3>
+            <button class="add-transaction-btn" onclick="openModal('transactionModal')">Add Transaction</button>
+            <table id="transactionsTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>Action</th>
+                </thead>
+                <tbody id="transactionsBody"></tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div id="expenseModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('expenseModal')">&times;</span>
+            <h2>Add Expense</h2>
+            <form id="expenseForm" onsubmit="handleExpenseSubmit(event)">
+                <input type="number" placeholder="Amount" required>
+                <input type="text" placeholder="Description" required>
+                <select required>
+                    <option value="">Select Category</option>
+                    <option value="Food">Food</option>
+                    <option value="Transport">Transport</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Others">Others</option>
+                </select>
+                <button type="submit">Add Expense</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="incomeModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('incomeModal')">&times;</span>
+            <h2>Add Income</h2>
+            <form id="incomeForm" onsubmit="handleIncomeSubmit(event)">
+                <input type="number" placeholder="Amount" required>
+                <input type="text" placeholder="Description" required>
+                <select required>
+                    <option value="">Select Category</option>
+                    <option value="Salary">Salary</option>
+                    <option value="Freelance">Freelance</option>
+                    <option value="Investment">Investment</option>
+                    <option value="Other">Other</option>
+                </select>
+                <button type="submit">Add Income</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="transactionModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('transactionModal')">&times;</span>
+            <h2>Add Transaction</h2>
+            <form id="transactionForm" onsubmit="handleTransactionSubmit(event)">
+                <select id="transactionType" required>
+                    <option value="">Select Type</option>
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+                <input type="number" placeholder="Amount" required>
+                <input type="text" placeholder="Description" required>
+                <input type="date" required>
+                <select id="transactionCategory" required>
+                    <option value="">Select Category</option>
+                </select>
+                <button type="submit">Add Transaction</button>
+            </form>
+        </div>
+    </div>
+<script>
+    // Data management
+let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+let expenseChart = null;  // Initialize chart variables globally
+let trendChart = null;
+
+const updateDashboard = () => {
+    const currentTimeRange = getCurrentTimeRange();
+    const currentDate = new Date();
+    
+    // Filter transactions based on time range
+    const filteredTransactions = transactions.filter(transaction => {
+        const transactionDate = new Date(transaction.date);
+        switch(currentTimeRange) {
+            case 'daily':
+                return transactionDate.toDateString() === currentDate.toDateString();
+            case 'monthly':
+                return transactionDate.getMonth() === currentDate.getMonth() && 
+                       transactionDate.getFullYear() === currentDate.getFullYear();
+            case 'yearly':
+                return transactionDate.getFullYear() === currentDate.getFullYear();
+            default:
+                return true;
+        }
+    });
+
+    // Calculate totals
+    const totals = filteredTransactions.reduce((acc, transaction) => {
+        if (transaction.amount > 0) {
+            acc.income += transaction.amount;
+        } else {
+            acc.expenses += Math.abs(transaction.amount);
+        }
+        acc.balance = acc.income - acc.expenses;
+        acc.savings = acc.income * 0.2; // Assuming 20% savings rate
+        return acc;
+    }, { income: 0, expenses: 0, balance: 0, savings: 0 });
+
+    // Update stat cards
+    document.getElementById('savingsValue').textContent = `$${totals.savings.toFixed(2)}`;
+    document.getElementById('balanceValue').textContent = `$${totals.balance.toFixed(2)}`;
+    document.getElementById('expensesValue').textContent = `$${totals.expenses.toFixed(2)}`;
+    document.getElementById('incomeValue').textContent = `$${totals.income.toFixed(2)}`;
+
+    // Calculate expense breakdown for pie chart
+    const expensesByCategory = filteredTransactions
+        .filter(t => t.amount < 0)
+        .reduce((acc, transaction) => {
+            acc[transaction.category] = (acc[transaction.category] || 0) + Math.abs(transaction.amount);
+            return acc;
+        }, {});
+
+    // Update expense chart
+    const expenseData = Object.entries(expensesByCategory).map(([name, value]) => ({
+        name,
+        value: (value / totals.expenses) * 100
+    }));
+
+    // Update trend chart data
+    const trendData = getTrendData(currentTimeRange, filteredTransactions);
+
+    // Update charts
+    updateCharts(expenseData, trendData);
+
+    // Update transactions table
+    updateTransactionsTable(filteredTransactions);
+};
+
+const getTrendData = (timeRange, transactions) => {
+    const labels = [];
+    const incomeData = [];
+    const expenseData = [];
+    
+    switch(timeRange) {
+        case 'daily':
+            // Last 7 days
+            for(let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                labels.push(date.toLocaleDateString('en-US', { weekday: 'short' }));
+                
+                const dayTransactions = transactions.filter(t => 
+                    new Date(t.date).toDateString() === date.toDateString()
+                );
+                
+                incomeData.push(dayTransactions.reduce((sum, t) => sum + (t.amount > 0 ? t.amount : 0), 0));
+                expenseData.push(dayTransactions.reduce((sum, t) => sum + (t.amount < 0 ? Math.abs(t.amount) : 0), 0));
+            }
+            break;
+        case 'monthly':
+            // Last 6 months
+            for(let i = 5; i >= 0; i--) {
+                const date = new Date();
+                date.setMonth(date.getMonth() - i);
+                labels.push(date.toLocaleDateString('en-US', { month: 'short' }));
+                
+                const monthTransactions = transactions.filter(t => {
+                    const tDate = new Date(t.date);
+                    return tDate.getMonth() === date.getMonth() && 
+                           tDate.getFullYear() === date.getFullYear();
+                });
+                
+                incomeData.push(monthTransactions.reduce((sum, t) => sum + (t.amount > 0 ? t.amount : 0), 0));
+                expenseData.push(monthTransactions.reduce((sum, t) => sum + (t.amount < 0 ? Math.abs(t.amount) : 0), 0));
+            }
+            break;
+        case 'yearly':
+            // Last 5 years
+            for(let i = 4; i >= 0; i--) {
+                const date = new Date();
+                date.setFullYear(date.getFullYear() - i);
+                labels.push(date.getFullYear().toString());
+                
+                const yearTransactions = transactions.filter(t => 
+                    new Date(t.date).getFullYear() === date.getFullYear()
+                );
+                
+                incomeData.push(yearTransactions.reduce((sum, t) => sum + (t.amount > 0 ? t.amount : 0), 0));
+                expenseData.push(yearTransactions.reduce((sum, t) => sum + (t.amount < 0 ? Math.abs(t.amount) : 0), 0));
+            }
+            break;
+    }
+    
+    return {
+        labels,
+        income: incomeData,
+        expenses: expenseData
+    };
+};
+
+const updateCharts = (expenseData, trendData) => {
+    const expenseCtx = document.getElementById('expenseChart').getContext('2d');
+    const trendCtx = document.getElementById('trendChart').getContext('2d');
+
+    // Destroy existing charts if they exist
+    if (expenseChart instanceof Chart) {
+        expenseChart.destroy();
+    }
+    if (trendChart instanceof Chart) {
+        trendChart.destroy();
+    }
+
+    // Create new Expense Chart
+    expenseChart = new Chart(expenseCtx, {
+        type: 'doughnut',
+        data: {
+            labels: expenseData.map(item => item.name),
+            datasets: [{
+                data: expenseData.map(item => item.value),
+                backgroundColor: ['#E5E7EB', '#D1D5DB', '#9CA3AF', '#6B7280']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    // Create new Trend Chart
+    trendChart = new Chart(trendCtx, {
+        type: 'line',
+        data: {
+            labels: trendData.labels,
+            datasets: [
+                {
+                    label: 'Income',
+                    data: trendData.income,
+                    borderColor: '#10B981',
+                    tension: 0.1
+                },
+                {
+                    label: 'Expenses',
+                    data: trendData.expenses,
+                    borderColor: '#EF4444',
+                    tension: 0.1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+};
+
+const deleteTransaction = (index) => {
+    transactions.splice(index, 1);
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+    updateDashboard();
+};
+
+const updateTransactionsTable = (filteredTransactions) => {
+    const tbody = document.getElementById('transactionsBody');
+    tbody.innerHTML = '';
+    
+    filteredTransactions.sort((a, b) => new Date(b.date) - new Date(a.date))
+        .forEach((transaction, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${transaction.date}</td>
+                <td>${transaction.description}</td>
+                <td>${transaction.category}</td>
+                <td class="${transaction.amount >= 0 ? 'positive' : 'negative'}">
+                    $${Math.abs(transaction.amount).toFixed(2)}
+                </td>
+                <td><button class="delete-btn" onclick="deleteTransaction(${transactions.indexOf(transaction)})">Delete</button></td>
+            `;
+            tbody.appendChild(row);
+        });
+};
+
+// Form handling functions
+function handleExpenseSubmit(event) {
+    event.preventDefault();
+    const form = event.target;
+    const amount = parseFloat(form.elements[0].value);
+    const description = form.elements[1].value;
+    const category = form.elements[2].value;
+
+    const transaction = {
+        date: new Date().toISOString().split('T')[0],
+        description,
+        amount: -amount,
+        category
+    };
+
+    transactions.push(transaction);
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+    updateDashboard();
+    closeModal('expenseModal');
+    form.reset();
+}
+
+function handleIncomeSubmit(event) {
+    event.preventDefault();
+    const form = event.target;
+    const amount = parseFloat(form.elements[0].value);
+    const description = form.elements[1].value;
+    const category = form.elements[2].value;
+
+    const transaction = {
+        date: new Date().toISOString().split('T')[0],
+        description,
+        amount: amount,
+        category
+    };
+
+    transactions.push(transaction);
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+    updateDashboard();
+    closeModal('incomeModal');
+    form.reset();
+}
+
+function handleTransactionSubmit(event) {
+    event.preventDefault();
+    const form = event.target;
+    const type = form.elements[0].value;
+    const amount = parseFloat(form.elements[1].value);
+    const description = form.elements[2].value;
+    const date = form.elements[3].value;
+    const category = form.elements[4].value;
+
+    const transaction = {
+        date,
+        description,
+        amount: type === 'income' ? amount : -amount,
+        category
+    };
+
+    transactions.push(transaction);
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+    updateDashboard();
+    closeModal('transactionModal');
+    form.reset();
+}
+
+// Modal handling
+function openModal(modalId) {
+    document.getElementById(modalId).style.display = 'block';
+    if (modalId === 'transactionModal') {
+        setupTransactionCategoryDropdown();
+    }
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+}
+
+function setupTransactionCategoryDropdown() {
+    const typeSelect = document.getElementById('transactionType');
+    const categorySelect = document.getElementById('transactionCategory');
+    const type = typeSelect.value;
+
+    const categories = type === 'income' 
+        ? ['Salary', 'Freelance', 'Investment', 'Other']
+        : ['Food', 'Transport', 'Shopping', 'Entertainment'];
+
+    categorySelect.innerHTML = '<option value="">Select Category</option>' +
+        categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+}
+
+// Data management enhancement
+function addTransaction(transaction) {
+    transactions.push(transaction);
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+}
+
+function getCurrentTimeRange() {
+    const activeButton = document.querySelector('.time-btn.active');
+    return activeButton ? activeButton.dataset.range : 'daily';
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    // Set current date as default
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('dateInput').value = today;
+    document.getElementById('dateInput').defaultValue = today;
+    
+    updateDashboard();
+    
+    // Time range buttons
+    const timeButtons = document.querySelectorAll('.time-btn');
+    timeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            timeButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            updateDashboard();
+        });
+    });
+
+    // Transaction type change handler
+    document.getElementById('transactionType').addEventListener('change', function() {
+        setupTransactionCategoryDropdown();
+    });
+
+    // Close modals when clicking outside
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+        }
+    };
+});
+</script>
+</body>
+</html>

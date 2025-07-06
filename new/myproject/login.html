@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Poppins&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: "Poppins", serif;
+            background-image: linear-gradient(to bottom, #0D1321, #1D2D44);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            display: flex;
+            width: 1200px;
+            height: 800px;
+            background-color: #3e5c76;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .login-container .left-section {
+            flex: 1;
+            margin-left: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            background-color: white;
+        }
+
+        .login-container .right-section {
+            flex: 1;
+            padding: 90px;
+            color: #e4e9f2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .right-section h3 {
+            font-size: 50px;
+            font-family: "Poppins", serif;
+            margin-bottom: 20px;
+            text-align: left;
+
+        }
+
+        .right-section p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .right-section p a {
+            color: #1fbf73;
+            text-decoration: none;
+        }
+
+        .right-section form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .right-section input {
+            background-color: #6c8397;
+            border: 3px solid #6c8398;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .right-section input::placeholder {
+            color: #1D2D44;
+        }
+
+        .right-section a {
+            font-size: 0.85rem;
+            color: #1fbf73;
+            text-align: right;
+            margin-bottom: 20px;
+            text-decoration: none;
+        }
+
+        .right-section button {
+            background-color: #D8fd49;
+            color: rgb(0, 0, 0);
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            align-items: center;
+        }
+
+        .right-section button:hover {
+            background-color: #17a661;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background-color: #6b7280;
+        }
+
+        .divider span {
+            margin: 0 10px;
+            font-size: 0.85rem;
+        }
+
+
+        .google-signin {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            border: 1px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .google-signin img {
+            width: 20px;
+        }
+
+        .create-account {
+            background-color: #D8fd49;
+            color: rgb(0, 0, 0);
+            width: 100%;
+            border: none;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            align-items: center;
+            margin-bottom: none;
+        }
+
+        .create-account:hover {
+            background-color: #17a661;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="left-section">
+            <img src="login.png" alt="login">
+                </div>
+        <div class="right-section">
+            <h3>Welcome back!</h3>
+            <p>Don't have an account? <a href="/signup">Sign up</a></p>
+            <form id="loginForm">
+                <input type="email" id="email" placeholder="Email Address" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <a href="#">Forgot Password?</a>
+                <button type="submit">Login</button>
+            </form>
+
+            <div class="divider">
+                <span>or</span>
+            </div>
+
+            <!-- Google Sign-In Button -->
+            <button id="googleSignIn" class="google-signin">
+                <img src="https://www.google.com/favicon.ico" alt="Google icon">
+                Sign in with Google
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+    
+            let email = document.getElementById("email").value.trim();
+            let password = document.getElementById("password").value.trim();
+    
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.access_token) {
+                    localStorage.setItem('access_token', data.access_token);
+                    window.location.href = "/landing"; // Flask serves it under "/landing"
+                } else {
+                    alert(data.message || "Login failed.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred during login.');
+            });
+        });
+    </script>
+    
+</body>
+
+</html>

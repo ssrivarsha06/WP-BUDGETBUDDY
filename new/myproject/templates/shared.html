@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Family Budget Tracker - Shared Space</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+  --bg-color: #f9fafb;
+  --primary-color: #3b82f6;
+  --primary-hover: #2563eb;
+  --text-color: #1f2937;
+  --muted-text: #6b7280;
+  --border-color: #e5e7eb;
+  --card-bg: #ffffff;
+  --purple-bg: #f5f3ff;
+  --purple-text: #7c3aed;
+  --blue-bg: #eff6ff;
+  --blue-text: #3b82f6;
+  --red-bg: #fee2e2;
+  --red-text: #ef4444;
+  --green-bg: #f0fdf4;
+  --green-text: #22c55e;
+  --positive-text: #16a34a;
+  --negative-text: #dc2626;
+  --radius: 0.5rem;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+body {
+  background: linear-gradient(to bottom, #F9FAFB, #F3F4F6);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+.navbar {
+  background-color: #748CAB;
+  padding: 1rem 2rem;
+  position: relative; /* This allows centering nav links */
+  display: flex;
+  align-items: center;
+  height: 60px;
+  margin-bottom: 2rem;
+}
+
+.nav-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  z-index: 2;
+}
+
+.nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  transition: background-color 0.2s;
+}
+
+.nav-links a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-links a.active {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+.stat-card:hover {
+  transform: scale(1.05);
+}
+@media (min-width: 640px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (min-width: 768px) {
+  .nav-links {
+      display: flex;
+      gap: 2rem;
+  }
+
+  .nav-link {
+      color: #ffffff;
+      text-decoration: none;
+      padding-bottom: 0.25rem;
+  }
+
+  .nav-link.active {
+      border-bottom: 2px solid #ffffff;
+  }
+}
+.stat-card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.stat-card.purple {
+  background-color: var(--purple-bg);
+}
+
+.stat-card.blue {
+  background-color: var(--blue-bg);
+}
+
+.stat-card.red {
+  background-color: var(--red-bg);
+}
+
+.stat-card.green {
+  background-color: var(--green-bg);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.card-header h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--muted-text);
+}
+
+.card-header i {
+  color: var(--purple-text);
+}
+
+.stat-card.purple .card-header i {
+  color: var(--purple-text);
+}
+
+.stat-card.blue .card-header i {
+  color: var(--blue-text);
+}
+
+.stat-card.red .card-header i {
+  color: var(--red-text);
+}
+
+.stat-card.green .card-header i {
+  color: var(--green-text);
+}
+
+.card-content h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.positive {
+  color: var(--positive-text);
+}
+
+.negative {
+  color: var(--negative-text);
+}
+
+.link {
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+/* Tabs */
+.tabs-container {
+  margin-bottom: 2rem;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted-text);
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.tab-btn.active {
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
+  font-weight: 500;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.content-header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.add-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Lists */
+.expenses-list, .goals-list, .savings-list, .members-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.expense-card, .goal-card, .savings-card, .member-card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.expense-content, .member-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.expense-details h3, .goal-details h3, .savings-details h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.expense-details p, .goal-details p, .savings-details p {
+  font-size: 0.875rem;
+  color: var(--muted-text);
+}
+
+.expense-amount {
+  text-align: right;
+}
+
+.expense-amount p:first-child {
+  font-weight: 600;
+}
+
+.progress-container {
+  margin-top: 0.75rem;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 0.5rem;
+  background-color: var(--border-color);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--primary-color);
+  border-radius: 9999px;
+}
+
+.goal-card .progress-fill {
+  background-color: var(--blue-text);
+}
+
+.savings-card .progress-fill {
+  background-color: var(--purple-text);
+}
+
+/* Member card */
+.member-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.member-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--muted-text);
+  color: white;
+  font-weight: 500;
+}
+
+.member-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.member-details h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.member-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--muted-text);
+}
+
+.member-meta span:nth-child(2) {
+  font-size: 0.75rem;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  width: 90%;
+  max-width: 500px;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--muted-text);
+}
+
+.modal-body {
+  padding: 1rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+}
+
+.modal-footer {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.primary-btn {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.primary-btn:hover {
+  background-color: var(--primary-hover);
+}
+.date-display {
+    font-size: 0.875rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+}
+  </style>
+</head>
+<body>
+  
+    <!-- Header -->
+    <header class="navbar">
+      <div class="nav-logo">BudgetBuddy</div>
+      <nav class="nav-links">
+        <a href="{{ url_for('dashboard') }}" >Dashboard</a>
+        <a href="{{ url_for('analytics') }}">Analytics</a>
+        <a href="{{ url_for('shared') }}" >Shared space</a>
+        <a href="{{ url_for('logout') }}" class="date-display">Logout</a>
+
+      </nav>
+    </header>
+    
+      
+<div class="container">
+    <!-- Stats Overview -->
+    <div class="stats-grid">
+      <div class="stat-card purple">
+        <div class="card-header">
+          <h3>Group Savings</h3>
+          <i data-lucide="piggy-bank"></i>
+        </div>
+        <div class="card-content">
+          <h2>$2,450.00</h2>
+          <p class="positive">+12% from last month</p>
+        </div>
+      </div>
+      
+      <div class="stat-card blue">
+        <div class="card-header">
+          <h3>Shared Balance</h3>
+          <i data-lucide="wallet"></i>
+        </div>
+        <div class="card-content">
+          <h2>$3,850.00</h2>
+          <p class="negative">-3% from last month</p>
+        </div>
+      </div>
+      
+      <div class="stat-card red">
+        <div class="card-header">
+          <h3>Group Goals</h3>
+          <i data-lucide="target"></i>
+        </div>
+        <div class="card-content">
+          <h2>4 Active</h2>
+          <p class="positive">2 completed this month</p>
+        </div>
+      </div>
+      
+      <div class="stat-card green">
+        <div class="card-header">
+          <h3>Members</h3>
+          <i data-lucide="users"></i>
+        </div>
+        <div class="card-content">
+          <h2>5 People</h2>
+          <p class="link">View all members</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs-container">
+      <div class="tabs">
+        <button class="tab-btn" data-tab="goals">Shared Goals</button>
+        <button class="tab-btn active" data-tab="expenses">Group Expenses</button>
+        <button class="tab-btn" data-tab="savings">Savings Plans</button>
+      </div>
+      
+      <!-- Goals Tab Content -->
+      <div class="tab-content" id="goals-tab">
+        <div class="content-header">
+          <h2>Group Goals</h2>
+          <button class="add-btn" id="add-goal-btn">
+            <i data-lucide="plus"></i> Add Goal
+          </button>
+        </div>
+        
+        <div class="goals-list">
+          <!-- Goals will be populated here by JavaScript -->
+        </div>
+      </div>
+      
+      <!-- Expenses Tab Content -->
+      <div class="tab-content active" id="expenses-tab">
+        <div class="content-header">
+          <h2>Group Expenses</h2>
+          <button class="add-btn" id="add-expense-btn">
+            <i data-lucide="plus"></i> Add Expense
+          </button>
+        </div>
+        
+        <div class="expenses-list">
+          <!-- Expenses will be populated here by JavaScript -->
+        </div>
+      </div>
+      
+      <!-- Savings Tab Content -->
+      <div class="tab-content" id="savings-tab">
+        <div class="content-header">
+          <h2>Savings Plans</h2>
+          <button class="add-btn" id="add-savings-btn">
+            <i data-lucide="plus"></i> Add Savings Plan
+          </button>
+        </div>
+        
+        <div class="savings-list">
+          <!-- Savings plans will be populated here by JavaScript -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Members Section -->
+    <div class="members-section">
+      <div class="content-header">
+        <h2>Group Members</h2>
+        <button class="add-btn" id="invite-member-btn">
+          <i data-lucide="plus"></i> Invite
+        </button>
+      </div>
+      
+      <div class="members-list">
+        <!-- Members will be populated here by JavaScript -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- Dialog Modals -->
+  <!-- Add Expense Modal -->
+  <div class="modal" id="expense-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add New Expense</h2>
+        <button class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="expenseName">Expense Name</label>
+          <input type="text" id="expenseName" placeholder="e.g., Monthly Rent">
+        </div>
+        <div class="form-group">
+          <label for="expenseAmount">Amount ($)</label>
+          <input type="number" id="expenseAmount" placeholder="e.g., 2000">
+        </div>
+        <div class="form-group">
+          <label for="expenseSplit">Split Type</label>
+          <select id="expenseSplit">
+            <option>Equal Split</option>
+            <option>Percentage Split</option>
+            <option>Custom Split</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="expenseDate">Date</label>
+          <input type="date" id="expenseDate">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="primary-btn" id="save-expense-btn">Save Expense</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Goal Modal -->
+  <div class="modal" id="goal-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add New Goal</h2>
+        <button class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="goalName">Goal Name</label>
+          <input type="text" id="goalName" placeholder="e.g., Summer Vacation">
+        </div>
+        <div class="form-group">
+          <label for="goalTarget">Target Amount ($)</label>
+          <input type="number" id="goalTarget" placeholder="e.g., 3000">
+        </div>
+        <div class="form-group">
+          <label for="goalCurrent">Current Amount ($)</label>
+          <input type="number" id="goalCurrent" placeholder="e.g., 500">
+        </div>
+        <div class="form-group">
+          <label for="goalDeadline">Target Date</label>
+          <input type="date" id="goalDeadline">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="primary-btn" id="save-goal-btn">Save Goal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Savings Plan Modal -->
+  <div class="modal" id="savings-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add New Savings Plan</h2>
+        <button class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="savingsName">Plan Name</label>
+          <input type="text" id="savingsName" placeholder="e.g., Emergency Fund">
+        </div>
+        <div class="form-group">
+          <label for="savingsTarget">Target Amount ($)</label>
+          <input type="number" id="savingsTarget" placeholder="e.g., 5000">
+        </div>
+        <div class="form-group">
+          <label for="savingsCurrent">Current Amount ($)</label>
+          <input type="number" id="savingsCurrent" placeholder="e.g., 1000">
+        </div>
+        <div class="form-group">
+          <label for="savingsContribution">Monthly Contribution ($)</label>
+          <input type="number" id="savingsContribution" placeholder="e.g., 200">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="primary-btn" id="save-savings-btn">Save Plan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invite Member Modal -->
+  <div class="modal" id="invite-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Invite New Member</h2>
+        <button class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="memberEmail">Email Address</label>
+          <input type="email" id="memberEmail" placeholder="example@email.com">
+        </div>
+        <div class="form-group">
+          <label for="memberRole">Role</label>
+          <select id="memberRole">
+            <option>Member</option>
+            <option>Admin</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="primary-btn" id="send-invite-btn">Send Invitation</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize Lucide icons
+  lucide.createIcons();
+  
+  // Initial data
+  const expenses = [
+    { id: 1, name: "Monthly Rent", amount: 2000, splitType: "Equal Split", date: "2025-03-15" }
+  ];
+  
+  const goals = [
+    { id: 1, name: "Summer Vacation", target: 3000, current: 1500, deadline: "2025-08-01" },
+    { id: 2, name: "New Furniture", target: 2000, current: 500, deadline: "2025-06-15" }
+  ];
+  
+  const savingsPlans = [
+    { id: 1, name: "Emergency Fund", target: 5000, current: 2450, monthlyContribution: 200 }
+  ];
+  
+  const members = [
+    { id: 1, name: "Ramya", avatar: "https://via.placeholder.com/40", role: "Admin", joinedDate: "2 months ago", lastActive: "Today" },
+    { id: 2, name: "Srivarsha", avatar: "", role: "Member", joinedDate: "2 months ago", lastActive: "Yesterday" },
+    { id: 3, name: "Shruti", avatar: "", role: "Member", joinedDate: "1 month ago", lastActive: "3 days ago" },
+    { id: 4, name: "Josika", avatar: "", role: "Member", joinedDate: "3 weeks ago", lastActive: "Today" },
+    { id: 5, name: "Vaanmathi", avatar: "", role: "Member", joinedDate: "2 weeks ago", lastActive: "5 days ago" }
+  ];
+  
+  // Render initial data
+  renderExpenses();
+  renderGoals();
+  renderSavingsPlans();
+  renderMembers();
+  
+  // Tab switching
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      // Remove active class from all tab buttons and content
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      // Add active class to clicked button and corresponding content
+      button.classList.add('active');
+      const tabId = button.getAttribute('data-tab');
+      document.getElementById(tabId + '-tab').classList.add('active');
+    });
+  });
+  
+  // Modal handling
+  const modals = {
+    expense: document.getElementById('expense-modal'),
+    goal: document.getElementById('goal-modal'),
+    savings: document.getElementById('savings-modal'),
+    invite: document.getElementById('invite-modal')
+  };
+  
+  // Open modals
+  document.getElementById('add-expense-btn').addEventListener('click', () => openModal('expense'));
+  document.getElementById('add-goal-btn').addEventListener('click', () => openModal('goal'));
+  document.getElementById('add-savings-btn').addEventListener('click', () => openModal('savings'));
+  document.getElementById('invite-member-btn').addEventListener('click', () => openModal('invite'));
+  
+  // Close modals when clicking the close button
+  document.querySelectorAll('.close-btn').forEach(button => {
+    button.addEventListener('click', closeAllModals);
+  });
+  
+  // Close modals when clicking outside
+  window.addEventListener('click', (event) => {
+    for (const key in modals) {
+      if (event.target === modals[key]) {
+        closeAllModals();
+      }
+    }
+  });
+  
+  // Save buttons
+  document.getElementById('save-expense-btn').addEventListener('click', saveExpense);
+  document.getElementById('save-goal-btn').addEventListener('click', saveGoal);
+  document.getElementById('save-savings-btn').addEventListener('click', saveSavingsPlan);
+  document.getElementById('send-invite-btn').addEventListener('click', inviteMember);
+  
+  // Helper functions
+  function openModal(type) {
+    closeAllModals();
+    modals[type].classList.add('active');
+  }
+  
+  function closeAllModals() {
+    for (const key in modals) {
+      modals[key].classList.remove('active');
+    }
+    // Clear form inputs
+    document.querySelectorAll('.modal input').forEach(input => {
+      input.value = '';
+    });
+    document.querySelectorAll('.modal select').forEach(select => {
+      select.selectedIndex = 0;
+    });
+  }
+  
+  function calculateProgress(current, target) {
+    return Math.min(100, Math.round((current / target) * 100));
+  }
+  
+  function formatDate(dateString) {
+    if (!dateString) return 'Not specified';
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  }
+  
+  // Data manipulation functions
+  function saveExpense() {
+    const name = document.getElementById('expenseName').value;
+    const amount = document.getElementById('expenseAmount').value;
+    const splitType = document.getElementById('expenseSplit').value;
+    const date = document.getElementById('expenseDate').value;
+    
+    if (name && amount) {
+      const newExpense = {
+        id: expenses.length + 1,
+        name,
+        amount: parseFloat(amount),
+        splitType,
+        date: date || new Date().toISOString().split('T')[0]
+      };
+      
+      expenses.push(newExpense);
+      renderExpenses();
+      closeAllModals();
+    } else {
+      alert('Please fill out the required fields.');
+    }
+  }
+  
+  function saveGoal() {
+    const name = document.getElementById('goalName').value;
+    const target = document.getElementById('goalTarget').value;
+    const current = document.getElementById('goalCurrent').value || '0';
+    const deadline = document.getElementById('goalDeadline').value;
+    
+    if (name && target) {
+      const newGoal = {
+        id: goals.length + 1,
+        name,
+        target: parseFloat(target),
+        current: parseFloat(current),
+        deadline
+      };
+      
+      goals.push(newGoal);
+      renderGoals();
+      closeAllModals();
+    } else {
+      alert('Please fill out the required fields.');
+    }
+  }
+  
+  function saveSavingsPlan() {
+    const name = document.getElementById('savingsName').value;
+    const target = document.getElementById('savingsTarget').value;
+    const current = document.getElementById('savingsCurrent').value || '0';
+    const monthlyContribution = document.getElementById('savingsContribution').value || '0';
+    
+    if (name && target) {
+      const newPlan = {
+        id: savingsPlans.length + 1,
+        name,
+        target: parseFloat(target),
+        current: parseFloat(current),
+        monthlyContribution: parseFloat(monthlyContribution)
+      };
+      
+      savingsPlans.push(newPlan);
+      renderSavingsPlans();
+      closeAllModals();
+    } else {
+      alert('Please fill out the required fields.');
+    }
+  }
+  
+  function inviteMember() {
+    const email = document.getElementById('memberEmail').value;
+    const role = document.getElementById('memberRole').value;
+    
+    if (email) {
+      alert(`Invitation sent to ${email} for role: ${role}`);
+      closeAllModals();
+    } else {
+      alert('Please enter an email address.');
+    }
+  }
+  
+  // Rendering functions
+  function renderExpenses() {
+    const expensesList = document.querySelector('.expenses-list');
+    expensesList.innerHTML = '';
+    
+    expenses.forEach(expense => {
+      const expenseCard = document.createElement('div');
+      expenseCard.className = 'expense-card';
+      expenseCard.innerHTML = `
+        <div class="expense-content">
+          <div class="expense-details">
+            <h3>${expense.name}</h3>
+            <p>${expense.splitType}</p>
+          </div>
+          <div class="expense-amount">
+            <p>$${expense.amount.toFixed(2)}</p>
+            <p>${formatDate(expense.date)}</p>
+          </div>
+        </div>
+      `;
+      expensesList.appendChild(expenseCard);
+    });
+  }
+  
+  function renderGoals() {
+    const goalsList = document.querySelector('.goals-list');
+    goalsList.innerHTML = '';
+    
+    goals.forEach(goal => {
+      const progress = calculateProgress(goal.current, goal.target);
+      
+      const goalCard = document.createElement('div');
+      goalCard.className = 'goal-card';
+      goalCard.innerHTML = `
+        <div class="goal-details">
+          <div class="expense-content">
+            <h3>${goal.name}</h3>
+            <span>${goal.deadline ? `Due: ${formatDate(goal.deadline)}` : 'No deadline'}</span>
+          </div>
+          <div class="progress-container">
+            <div class="progress-info">
+              <span>$${goal.current.toFixed(2)} of $${goal.target.toFixed(2)}</span>
+              <span>${progress}%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${progress}%"></div>
+            </div>
+          </div>
+        </div>
+      `;
+      goalsList.appendChild(goalCard);
+    });
+  }
+  
+  function renderSavingsPlans() {
+    const savingsList = document.querySelector('.savings-list');
+    savingsList.innerHTML = '';
+    
+    savingsPlans.forEach(plan => {
+      const progress = calculateProgress(plan.current, plan.target);
+      
+      const savingsCard = document.createElement('div');
+      savingsCard.className = 'savings-card';
+      savingsCard.innerHTML = `
+        <div class="savings-details">
+          <div class="expense-content">
+            <h3>${plan.name}</h3>
+            <span>$${plan.monthlyContribution}/month</span>
+          </div>
+          <div class="progress-container">
+            <div class="progress-info">
+              <span>$${plan.current.toFixed(2)} of $${plan.target.toFixed(2)}</span>
+              <span>${progress}%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${progress}%"></div>
+            </div>
+          </div>
+        </div>
+      `;
+      savingsList.appendChild(savingsCard);
+    });
+  }
+  
+  function renderMembers() {
+    const membersList = document.querySelector('.members-list');
+    membersList.innerHTML = '';
+    
+    members.forEach(member => {
+      const initials = member.name.split(' ').map(n => n[0]).join('');
+      
+      const memberCard = document.createElement('div');
+      memberCard.className = 'member-card';
+      memberCard.innerHTML = `
+        <div class="member-content">
+          <div class="member-info">
+            <div class="member-avatar">
+              ${member.avatar ? 
+                `<img src="${member.avatar}" alt="${member.name}" />` : 
+                `<span>${initials}</span>`
+              }
+            </div>
+            <div class="member-details">
+              <h3>${member.name}</h3>
+              <div class="member-meta">
+                <span>${member.role}</span>
+                <span>•</span>
+                <span>Added ${member.joinedDate}</span>
+              </div>
+            </div>
+          </div>
+          <span>Last active: ${member.lastActive}</span>
+        </div>
+      `;
+      membersList.appendChild(memberCard);
+    });
+  }
+});
+</script>
+</body>
+</html>

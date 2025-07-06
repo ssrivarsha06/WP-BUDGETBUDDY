@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .summary {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .summary div {
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            width: 30%;
+        }
+        .income { background-color: #c8e6c9; }
+        .expense { background-color: #ffcdd2; }
+        .savings { background-color: #bbdefb; }
+        #transactions {
+            list-style: none;
+            padding: 0;
+        }
+        #transactions li {
+            display: flex;
+            justify-content: space-between;
+            background: #fff;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Financial Dashboard</h2>
+        <div class="summary">
+            <div class="income">Income: $<span id="income">0</span></div>
+            <div class="expense">Expense: $<span id="expense">0</span></div>
+            <div class="savings">Savings: $<span id="savings">0</span></div>
+        </div>
+        <ul id="transactions"></ul>
+        <input type="text" id="desc" placeholder="Description">
+        <input type="number" id="amount" placeholder="Amount">
+        <button onclick="addTransaction()">Add Transaction</button>
+    </div>
+
+    <script>
+        let transactions = [];
+
+        function addTransaction() {
+            const desc = document.getElementById('desc').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+
+            if (desc === '' || isNaN(amount)) return;
+
+            transactions.push({ desc, amount });
+            document.getElementById('desc').value = '';
+            document.getElementById('amount').value = '';
+            updateUI();
+        }
+
+        function updateUI() {
+            const transactionsList = document.getElementById('transactions');
+            transactionsList.innerHTML = '';
+
+            let income = 0, expense = 0;
+            transactions.forEach((t, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `${t.desc} <span>$${t.amount.toFixed(2)}</span> <button onclick="removeTransaction(${index})">X</button>`;
+                transactionsList.appendChild(li);
+                t.amount > 0 ? income += t.amount : expense += Math.abs(t.amount);
+            });
+            
+            document.getElementById('income').innerText = income.toFixed(2);
+            document.getElementById('expense').innerText = expense.toFixed(2);
+            document.getElementById('savings').innerText = (income - expense).toFixed(2);
+        }
+
+        function removeTransaction(index) {
+            transactions.splice(index, 1);
+            updateUI();
+        }
+    </script>
+</body>
+</html>
