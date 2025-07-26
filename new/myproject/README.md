@@ -92,8 +92,10 @@ Access the app at `http://localhost:5000`
 
 ## 🙋‍♀️ Author
 
-Developed by **Srivarsha Sivakumar**  
-[LinkedIn](https://linkedin.com/in/srivarsha-sivakumar)
+Developed by **Srivarsha Sivakumar, Ramya Nakshathra, Shruti** as a part of our academic project.  
+[LinkedIn-Srivarsha](https://linkedin.com/in/srivarsha-sivakumar)
+[LinkedIn-Ramya](https://www.linkedin.com/in/ramya-nakshathra)
+[LinkedIn-Shruti](https://www.linkedin.com/in/shrutiselvakkumar)
 
 ---
 
