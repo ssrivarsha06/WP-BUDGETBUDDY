@@ -92,7 +92,7 @@ Access the app at `http://localhost:5000`
 
 ## 🙋‍♀️ Author
 
-Developed by **Srivarsha Sivakumar, Ramya Nakshathra, Shruti** as a part of our academic project.  
+Developed by **Srivarsha Sivakumar, Ramya Nakshathra, Shruti** 
 [LinkedIn-Srivarsha](https://linkedin.com/in/srivarsha-sivakumar)
 [LinkedIn-Ramya](https://www.linkedin.com/in/ramya-nakshathra)
 [LinkedIn-Shruti](https://www.linkedin.com/in/shrutiselvakkumar)
